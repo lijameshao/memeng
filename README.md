@@ -4,6 +4,8 @@ Memory for engineering decisions in Claude Code. memeng captures each decision a
 
 Blog post: [Building a memory harness from scratch](https://lijames.substack.com/p/building-a-memory-harness-from-scratch)
 
+![memeng architecture](docs/assets/memeng-simple.png)
+
 ## Why
 
 Code shows what was built, not why. The reason for a choice usually lives in a chat thread, a pull request comment or one person's head, and it is lost within months. An engineer who finds a rule with no reason can either keep it without knowing why or remove it and find out the hard way.
@@ -11,8 +13,6 @@ Code shows what was built, not why. The reason for a choice usually lives in a c
 memeng keeps a decision only if an engineer reading the code could not work it out alone. It saves the decision with the reason given in the conversation. When no reason is given, it saves nothing.
 
 ## How it works
-
-![memeng architecture](docs/assets/memeng-simple.png)
 
 memeng runs as two Claude Code hooks.
 
