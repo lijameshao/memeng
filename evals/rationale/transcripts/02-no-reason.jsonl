@@ -1,0 +1,4 @@
+{"type": "user", "uuid": "02-01", "timestamp": "2026-09-20T10:01:00Z", "message": {"role": "user", "content": "switch the feature flag store from the config file to the database table"}}
+{"type": "assistant", "uuid": "02-02", "timestamp": "2026-09-20T10:02:00Z", "message": {"role": "assistant", "content": "Moved `flags.toml` into the `feature_flags` table with a migration. The loader reads the table at start. 14 tests pass."}}
+{"type": "user", "uuid": "02-03", "timestamp": "2026-09-20T10:03:00Z", "message": {"role": "user", "content": "ok ship it"}}
+{"type": "assistant", "uuid": "02-04", "timestamp": "2026-09-20T10:04:00Z", "message": {"role": "assistant", "content": "Pushed and opened the pull request."}}

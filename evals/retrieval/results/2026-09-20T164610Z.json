@@ -1,0 +1,1395 @@
+{
+  "sweep": "semantic_threshold",
+  "rows": {
+    "0.3": {
+      "all": {
+        "recall": 1.0,
+        "precision": 0.18627450980392157,
+        "silence": 0.0,
+        "temporal": 0.0,
+        "n": 20
+      },
+      "retrieval": {
+        "recall": 1.0,
+        "precision": 0.1138888888888889,
+        "silence": null,
+        "temporal": null,
+        "n": 12
+      },
+      "temporal": {
+        "recall": 1.0,
+        "precision": 0.36,
+        "silence": null,
+        "temporal": 0.0,
+        "n": 5
+      },
+      "negative": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null,
+        "n": 3
+      }
+    },
+    "0.4": {
+      "all": {
+        "recall": 0.9705882352941176,
+        "precision": 0.40023342670401496,
+        "silence": 0.0,
+        "temporal": 0.0,
+        "n": 20
+      },
+      "retrieval": {
+        "recall": 0.9583333333333334,
+        "precision": 0.3544973544973545,
+        "silence": null,
+        "temporal": null,
+        "n": 12
+      },
+      "temporal": {
+        "recall": 1.0,
+        "precision": 0.51,
+        "silence": null,
+        "temporal": 0.0,
+        "n": 5
+      },
+      "negative": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null,
+        "n": 3
+      }
+    },
+    "0.5": {
+      "all": {
+        "recall": 0.7941176470588235,
+        "precision": 0.5117647058823529,
+        "silence": 0.6666666666666666,
+        "temporal": 0.0,
+        "n": 20
+      },
+      "retrieval": {
+        "recall": 0.7083333333333334,
+        "precision": 0.41944444444444445,
+        "silence": null,
+        "temporal": null,
+        "n": 12
+      },
+      "temporal": {
+        "recall": 1.0,
+        "precision": 0.7333333333333333,
+        "silence": null,
+        "temporal": 0.0,
+        "n": 5
+      },
+      "negative": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.6666666666666666,
+        "temporal": null,
+        "n": 3
+      }
+    },
+    "0.6": {
+      "all": {
+        "recall": 0.3235294117647059,
+        "precision": 0.3137254901960784,
+        "silence": 1.0,
+        "temporal": 0.0,
+        "n": 20
+      },
+      "retrieval": {
+        "recall": 0.16666666666666666,
+        "precision": 0.125,
+        "silence": null,
+        "temporal": null,
+        "n": 12
+      },
+      "temporal": {
+        "recall": 0.7,
+        "precision": 0.7666666666666666,
+        "silence": null,
+        "temporal": 0.0,
+        "n": 5
+      },
+      "negative": {
+        "recall": null,
+        "precision": null,
+        "silence": 1.0,
+        "temporal": null,
+        "n": 3
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "retrieval-01",
+      "value": "0.3",
+      "returned": [
+        "vec",
+        "d13",
+        "d18",
+        "d4",
+        "d27",
+        "d6",
+        "d17",
+        "d20",
+        "d24",
+        "d28"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-02",
+      "value": "0.3",
+      "returned": [
+        "d26",
+        "d1",
+        "retry",
+        "d7",
+        "d15",
+        "d19",
+        "d6",
+        "d5",
+        "d20",
+        "d13"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-03",
+      "value": "0.3",
+      "returned": [
+        "d2",
+        "flags",
+        "d7",
+        "d24",
+        "d6",
+        "d19",
+        "d12",
+        "d11",
+        "d17",
+        "d14"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-04",
+      "value": "0.3",
+      "returned": [
+        "drain",
+        "d3",
+        "d5",
+        "d4",
+        "d17",
+        "d12",
+        "d6",
+        "d11",
+        "d28",
+        "d14"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-05",
+      "value": "0.3",
+      "returned": [
+        "d4",
+        "migrate",
+        "d8",
+        "d21",
+        "d13",
+        "d6",
+        "d12",
+        "d17",
+        "d23",
+        "d19"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-06",
+      "value": "0.3",
+      "returned": [
+        "breaker",
+        "d5",
+        "d11",
+        "d12",
+        "d20",
+        "d0",
+        "d23",
+        "d6",
+        "d19",
+        "d26"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-07",
+      "value": "0.3",
+      "returned": [
+        "lookup",
+        "d6",
+        "d21",
+        "d29",
+        "d10",
+        "d17",
+        "d0",
+        "d7",
+        "d28",
+        "d1"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-08",
+      "value": "0.3",
+      "returned": [
+        "d7",
+        "dedupe",
+        "d16",
+        "d4",
+        "d27",
+        "d6",
+        "d19",
+        "d15",
+        "d13",
+        "d12"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-09",
+      "value": "0.3",
+      "returned": [
+        "d8",
+        "realdb",
+        "d17",
+        "d20",
+        "d6",
+        "d21",
+        "d23",
+        "d12",
+        "d4",
+        "d13"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-10",
+      "value": "0.3",
+      "returned": [
+        "d9",
+        "minor",
+        "d0",
+        "d14",
+        "d25",
+        "d24"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.16666666666666666,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-11",
+      "value": "0.3",
+      "returned": [
+        "bucket",
+        "d0",
+        "perkey",
+        "d6",
+        "d20",
+        "d2",
+        "d23",
+        "d21",
+        "d14",
+        "d28"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-12",
+      "value": "0.3",
+      "returned": [
+        "picked",
+        "d7",
+        "d16",
+        "d6",
+        "d23",
+        "d27",
+        "d12",
+        "d20",
+        "d4",
+        "d13"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "temporal-01",
+      "value": "0.3",
+      "returned": [
+        "old",
+        "new"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-02",
+      "value": "0.3",
+      "returned": [
+        "new",
+        "old",
+        "d6",
+        "d29",
+        "d21",
+        "d1",
+        "d20",
+        "d10",
+        "d16",
+        "d0"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-03",
+      "value": "0.3",
+      "returned": [
+        "old",
+        "d5",
+        "new",
+        "d11",
+        "d20",
+        "d1",
+        "d6",
+        "d26",
+        "d17",
+        "d10"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-04",
+      "value": "0.3",
+      "returned": [
+        "old",
+        "d12",
+        "new",
+        "d4",
+        "d3",
+        "d13",
+        "d19",
+        "d2",
+        "d17",
+        "d6"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-05",
+      "value": "0.3",
+      "returned": [
+        "old",
+        "new",
+        "d4",
+        "d21",
+        "d8",
+        "d12",
+        "d6",
+        "d13",
+        "d17",
+        "d19"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "negative-01",
+      "value": "0.3",
+      "returned": [
+        "d8",
+        "d4",
+        "d21",
+        "d17",
+        "d12",
+        "d13",
+        "d5",
+        "d20",
+        "d7",
+        "d1"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-02",
+      "value": "0.3",
+      "returned": [
+        "d12",
+        "d27",
+        "d14",
+        "d13",
+        "d25",
+        "d18",
+        "d9",
+        "d2",
+        "d4",
+        "d7"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-03",
+      "value": "0.3",
+      "returned": [
+        "d24"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-01",
+      "value": "0.4",
+      "returned": [
+        "vec",
+        "d13",
+        "d18"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.3333333333333333,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-02",
+      "value": "0.4",
+      "returned": [
+        "d26",
+        "d1",
+        "retry",
+        "d7",
+        "d15",
+        "d19",
+        "d6",
+        "d5",
+        "d20",
+        "d13"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-03",
+      "value": "0.4",
+      "returned": [
+        "d2",
+        "flags"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-04",
+      "value": "0.4",
+      "returned": [
+        "drain",
+        "d3",
+        "d5",
+        "d4",
+        "d17",
+        "d12",
+        "d6",
+        "d11",
+        "d28"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.1111111111111111,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-05",
+      "value": "0.4",
+      "returned": [
+        "d4",
+        "migrate",
+        "d13"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.3333333333333333,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-06",
+      "value": "0.4",
+      "returned": [
+        "breaker",
+        "d5"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-07",
+      "value": "0.4",
+      "returned": [
+        "lookup",
+        "d6",
+        "d29"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.3333333333333333,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-08",
+      "value": "0.4",
+      "returned": [
+        "d7",
+        "dedupe",
+        "d16",
+        "d27",
+        "d6"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-09",
+      "value": "0.4",
+      "returned": [
+        "d8",
+        "realdb",
+        "d17",
+        "d20",
+        "d21"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-10",
+      "value": "0.4",
+      "returned": [
+        "d9",
+        "minor"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-11",
+      "value": "0.4",
+      "returned": [
+        "bucket",
+        "d0",
+        "d6",
+        "d20",
+        "d2",
+        "d21",
+        "d17"
+      ],
+      "scores": {
+        "recall": 0.5,
+        "precision": 0.14285714285714285,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-12",
+      "value": "0.4",
+      "returned": [
+        "picked"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "temporal-01",
+      "value": "0.4",
+      "returned": [
+        "old",
+        "new"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-02",
+      "value": "0.4",
+      "returned": [
+        "new",
+        "old",
+        "d6",
+        "d29"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-03",
+      "value": "0.4",
+      "returned": [
+        "old",
+        "d5",
+        "new",
+        "d11",
+        "d20"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.4,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-04",
+      "value": "0.4",
+      "returned": [
+        "old",
+        "d12",
+        "new",
+        "d4",
+        "d13"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.4,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-05",
+      "value": "0.4",
+      "returned": [
+        "old",
+        "new",
+        "d4",
+        "d12",
+        "d6",
+        "d13",
+        "d17",
+        "d19"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.25,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "negative-01",
+      "value": "0.4",
+      "returned": [
+        "d8",
+        "d17"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-02",
+      "value": "0.4",
+      "returned": [
+        "d12",
+        "d14",
+        "d13",
+        "d25"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-03",
+      "value": "0.4",
+      "returned": [
+        "d24"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-01",
+      "value": "0.5",
+      "returned": [
+        "vec"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-02",
+      "value": "0.5",
+      "returned": [
+        "d26",
+        "d1",
+        "retry",
+        "d7",
+        "d15"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.2,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-03",
+      "value": "0.5",
+      "returned": [
+        "d2",
+        "flags"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-04",
+      "value": "0.5",
+      "returned": [
+        "drain",
+        "d3"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-05",
+      "value": "0.5",
+      "returned": [
+        "d4"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-06",
+      "value": "0.5",
+      "returned": [
+        "breaker",
+        "d5"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-07",
+      "value": "0.5",
+      "returned": [
+        "lookup",
+        "d6"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-08",
+      "value": "0.5",
+      "returned": [
+        "d7"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-09",
+      "value": "0.5",
+      "returned": [
+        "d8"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-10",
+      "value": "0.5",
+      "returned": [
+        "d9",
+        "minor"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-11",
+      "value": "0.5",
+      "returned": [
+        "bucket",
+        "d0",
+        "d6"
+      ],
+      "scores": {
+        "recall": 0.5,
+        "precision": 0.3333333333333333,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-12",
+      "value": "0.5",
+      "returned": [
+        "picked"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "temporal-01",
+      "value": "0.5",
+      "returned": [
+        "old",
+        "new"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-02",
+      "value": "0.5",
+      "returned": [
+        "new",
+        "old",
+        "d6"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.6666666666666666,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-03",
+      "value": "0.5",
+      "returned": [
+        "old",
+        "d5",
+        "new"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.6666666666666666,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-04",
+      "value": "0.5",
+      "returned": [
+        "old",
+        "d12",
+        "new"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.6666666666666666,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-05",
+      "value": "0.5",
+      "returned": [
+        "old",
+        "new",
+        "d4"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.6666666666666666,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "negative-01",
+      "value": "0.5",
+      "returned": [
+        "d8"
+      ],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 0.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-02",
+      "value": "0.5",
+      "returned": [],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 1.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-03",
+      "value": "0.5",
+      "returned": [],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 1.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-01",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-02",
+      "value": "0.6",
+      "returned": [
+        "d1"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-03",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-04",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-05",
+      "value": "0.6",
+      "returned": [
+        "d4"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-06",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-07",
+      "value": "0.6",
+      "returned": [
+        "lookup",
+        "d6"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-08",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-09",
+      "value": "0.6",
+      "returned": [
+        "d8"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-10",
+      "value": "0.6",
+      "returned": [
+        "d9"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-11",
+      "value": "0.6",
+      "returned": [
+        "d0"
+      ],
+      "scores": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "retrieval-12",
+      "value": "0.6",
+      "returned": [
+        "picked"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": null
+      }
+    },
+    {
+      "id": "temporal-01",
+      "value": "0.6",
+      "returned": [
+        "old"
+      ],
+      "scores": {
+        "recall": 0.5,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-02",
+      "value": "0.6",
+      "returned": [
+        "new",
+        "old",
+        "d6"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.6666666666666666,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-03",
+      "value": "0.6",
+      "returned": [
+        "old",
+        "d5"
+      ],
+      "scores": {
+        "recall": 0.5,
+        "precision": 0.5,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-04",
+      "value": "0.6",
+      "returned": [
+        "old"
+      ],
+      "scores": {
+        "recall": 0.5,
+        "precision": 1.0,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "temporal-05",
+      "value": "0.6",
+      "returned": [
+        "old",
+        "new",
+        "d4"
+      ],
+      "scores": {
+        "recall": 1.0,
+        "precision": 0.6666666666666666,
+        "silence": null,
+        "temporal": 0.0
+      }
+    },
+    {
+      "id": "negative-01",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 1.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-02",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 1.0,
+        "temporal": null
+      }
+    },
+    {
+      "id": "negative-03",
+      "value": "0.6",
+      "returned": [],
+      "scores": {
+        "recall": null,
+        "precision": null,
+        "silence": 1.0,
+        "temporal": null
+      }
+    }
+  ]
+}

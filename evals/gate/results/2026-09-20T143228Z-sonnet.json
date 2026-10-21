@@ -1,0 +1,138 @@
+{
+  "model": "sonnet",
+  "n": 100,
+  "fn_rate": 0.4166666666666667,
+  "fp_rate": 0.019230769230769232,
+  "latency": {
+    "mean_latency_s": 4.9774165587802415,
+    "p95_latency_s": 6.030594208976254
+  },
+  "misses": [
+    {
+      "id": "g-009",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Mechanically it's small \u2014 ~2 lines. Flip `wait_until_settled=False` to `True` and change the assertion to `[\"SENT\", \"SETTLED\"]`."
+    },
+    {
+      "id": "g-011",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Saved. The placement rule is generalizability, not call count."
+    },
+    {
+      "id": "g-013",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Correct. By default the tests never load a model. `SCORER_BUILD` is set in `conf/live.toml:210` but absent from `conf/dev.toml`, so in tests `scorer_value` returns None at its first guard."
+    },
+    {
+      "id": "g-014",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: the pilot test failed is it because it's running in the same shard?"
+    },
+    {
+      "id": "g-025",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Ticket rewritten. New title: \"Serve the floor from the backend for un-submitted sizes and delete the app-side formula\". Plan is 9 steps, split backend 1-4 and app 5-9."
+    },
+    {
+      "id": "g-027",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: for the dev toml, can't we have some dummy target_id (it doens't matter for local) so we don't have to set the setting n the test?"
+    },
+    {
+      "id": "g-033",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: is the import    from relay.jobs.drip import next_message_key"
+    },
+    {
+      "id": "g-034",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Short answer is **yes, keep the `audit.verdict` guard**, but for a more concrete reason than \"the value changes\"."
+    },
+    {
+      "id": "g-036",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: `test_closure_export_keeps_held_record` is written and passing, parametrized on the hold flag."
+    },
+    {
+      "id": "g-045",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: **What the dual-write question is about:**"
+    },
+    {
+      "id": "g-051",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: **No \u2014 the four pilot targets are the only blank-in-stage entries that reach `list_primary_targets`.** The filter in the return exists only to skip those blanks."
+    },
+    {
+      "id": "g-053",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: **Not your PR's invention \u2014 it copied the neighbour.** That exact 12-patch stack already exists at `spec/intake/test_gather.py:302`. Repo-wide maximum patch-stack depth is 12, in that one file."
+    },
+    {
+      "id": "g-054",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: I still feel like"
+    },
+    {
+      "id": "g-061",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: why do we need mock and patch?"
+    },
+    {
+      "id": "g-064",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: def _id_text(cls, v: UUID | str | None) -> str | None:"
+    },
+    {
+      "id": "g-065",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: Lena decided the API stays versioned by URL path. no further discussion."
+    },
+    {
+      "id": "g-069",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: the integration tests are red again"
+    },
+    {
+      "id": "g-079",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: I get what you mean now, REL-231 is later and has more context right, so we should have the parent as 231 instead"
+    },
+    {
+      "id": "g-083",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Not as written \u2014 that version changes behavior. The ternary guards the wrong variable: `key` is already guaranteed non-`None` by the `RuntimeError` two lines up."
+    },
+    {
+      "id": "g-092",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Dependency check done. The two are only ever set together."
+    },
+    {
+      "id": "g-098",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: cna you change this comment"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+[project]
+name = "memeng"
+version = "0.1.0"
+description = "Engineering-decision memory for Claude Code"
+requires-python = ">=3.12"
+dependencies = [
+    "sqlite-vec==0.1.9",
+    "spacy==3.8.16",
+    "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
+    "httpx==0.28.1",
+    "numpy==2.5.2",
+]
+
+[project.scripts]
+memeng = "memeng.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "pyyaml==6.0.3",
+]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[build-system]
+requires = ["uv_build>=0.11.19,<0.12.0"]
+build-backend = "uv_build"

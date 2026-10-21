@@ -1,0 +1,6 @@
+{"type": "user", "uuid": "01-01", "timestamp": "2026-09-20T10:01:00Z", "message": {"role": "user", "content": "the retry budget on the ingest worker keeps blowing up, what do you think"}}
+{"type": "assistant", "uuid": "01-02", "timestamp": "2026-09-20T10:02:00Z", "message": {"role": "assistant", "content": "Right now it retries five times with a fixed one second sleep. Under load that turns one slow upstream into five slow calls per job."}}
+{"type": "user", "uuid": "01-03", "timestamp": "2026-09-20T10:03:00Z", "message": {"role": "user", "content": "cap it at three retries with exponential backoff"}}
+{"type": "assistant", "uuid": "01-04", "timestamp": "2026-09-20T10:04:00Z", "message": {"role": "assistant", "content": "Done: three attempts, backoff 1s, 2s, 4s. Tests pass."}}
+{"type": "user", "uuid": "01-05", "timestamp": "2026-09-20T10:05:00Z", "message": {"role": "user", "content": "good. reason is the upstream has a 3 second p99, so anything past 4s of waiting is almost never going to succeed anyway and just holds the worker"}}
+{"type": "assistant", "uuid": "01-06", "timestamp": "2026-09-20T10:06:00Z", "message": {"role": "assistant", "content": "Recorded in the pull request body."}}

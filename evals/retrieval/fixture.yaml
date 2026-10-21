@@ -1,0 +1,281 @@
+# Every case seeds its own fresh store: `seed_facts` plus the first `distractors`
+# entries of distractors.yaml. `expected` names seed keys. For a temporal case
+# `expected` is [newer, older]. For a negative case `expected` is [].
+
+- id: retrieval-01
+  category: retrieval
+  query: where do the vectors live and why not a separate service
+  distractors: 30
+  seed_facts:
+    - key: vec
+      fact: Vectors are stored in sqlite-vec inside the one store file
+      rationale: a separate vector service adds a daemon and a network hop for a store that fits in one file
+      category: architecture
+      entities: [vector store, sqlite-vec]
+      created_at: "2026-09-03T09:00:00Z"
+  expected: [vec]
+
+- id: retrieval-02
+  category: retrieval
+  query: how many times do we retry and why
+  distractors: 30
+  seed_facts:
+    - key: retry
+      fact: A failed call is attempted three times in total before it is given up
+      rationale: the upstream p99 is three seconds, so a fourth attempt rarely lands inside the caller's budget
+      category: constraint
+      entities: [retry budget]
+      created_at: "2026-04-02T09:00:00Z"
+  expected: [retry]
+
+- id: retrieval-03
+  category: retrieval
+  query: when are feature flags loaded
+  distractors: 30
+  seed_facts:
+    - key: flags
+      fact: Flag values are loaded into memory when the process boots and are not refreshed
+      rationale: a lookup per request added measurable latency to the hot path
+      category: process
+      entities: [feature flag]
+      created_at: "2026-04-03T09:00:00Z"
+  expected: [flags]
+
+- id: retrieval-04
+  category: retrieval
+  query: do we drain or cut over on deploy
+  distractors: 30
+  seed_facts:
+    - key: drain
+      fact: A release drains the old instances for ninety seconds before they are stopped
+      rationale: an instant cut-over dropped requests that were still in flight
+      category: process
+      entities: [blue-green deploy]
+      created_at: "2026-04-04T09:00:00Z"
+  expected: [drain]
+
+- id: retrieval-05
+  category: retrieval
+  query: where do schema migrations run
+  distractors: 30
+  seed_facts:
+    - key: migrate
+      fact: Schema changes are applied by a standalone job that finishes before the new version starts
+      rationale: applying them on start made two replicas contend for the same lock
+      category: process
+      entities: [schema migration]
+      created_at: "2026-04-05T09:00:00Z"
+  expected: [migrate]
+
+- id: retrieval-06
+  category: retrieval
+  query: what makes the breaker open
+  distractors: 30
+  seed_facts:
+    - key: breaker
+      fact: The breaker trips once twenty calls in a row have failed
+      rationale: a lower count opened on a dependency that was slow but still answering
+      category: constraint
+      entities: [circuit breaker]
+      created_at: "2026-04-06T09:00:00Z"
+  expected: [breaker]
+
+- id: retrieval-07
+  category: retrieval
+  query: how long is the lookup cache
+  distractors: 30
+  seed_facts:
+    - key: lookup
+      fact: A user lookup stays in the cache for five minutes before it is fetched again
+      rationale: the identical query was reaching the database hundreds of times a second
+      category: architecture
+      entities: [cache]
+      created_at: "2026-04-07T09:00:00Z"
+  expected: [lookup]
+
+- id: retrieval-08
+  category: retrieval
+  query: why did duplicate jobs stop
+  distractors: 30
+  seed_facts:
+    - key: dedupe
+      fact: The queue drops a job whose message id it has already accepted
+      rationale: producers that timed out resent the same job and it ran twice
+      category: data_model
+      entities: [job queue]
+      created_at: "2026-04-08T09:00:00Z"
+  expected: [dedupe]
+
+- id: retrieval-09
+  category: retrieval
+  query: do tests use a fake database
+  distractors: 30
+  seed_facts:
+    - key: realdb
+      fact: The integration suite talks to a real database engine started in a container
+      rationale: the in-memory substitute accepted statements the real engine refused
+      category: process
+      entities: [integration tests]
+      created_at: "2026-04-09T09:00:00Z"
+  expected: [realdb]
+
+- id: retrieval-10
+  category: retrieval
+  query: how is money represented in the API
+  distractors: 30
+  seed_facts:
+    - key: minor
+      fact: Amounts cross the API as whole minor units rather than decimals
+      rationale: binary floating point rounding produced mismatches of a single unit
+      category: data_model
+      entities: [public API]
+      created_at: "2026-04-10T09:00:00Z"
+  expected: [minor]
+
+- id: retrieval-11
+  category: retrieval
+  query: how does the rate limiter count requests
+  distractors: 30
+  seed_facts:
+    - key: bucket
+      fact: The rate limiter refills a token bucket at a steady rate
+      rationale: a fixed window let a burst straddle the boundary and send double the limit
+      category: architecture
+      entities: [rate limiter, token bucket]
+      created_at: "2026-04-11T09:00:00Z"
+    - key: perkey
+      fact: Each client key gets its own token bucket
+      rationale: one shared bucket let a noisy client spend the allowance of every other client
+      category: architecture
+      entities: [rate limiter, token bucket]
+      created_at: "2026-04-11T10:00:00Z"
+  expected: [bucket, perkey]
+
+- id: retrieval-12
+  category: retrieval
+  query: who picked the queue library
+  distractors: 30
+  seed_facts:
+    - key: picked
+      fact: Background work goes through the streams queue library
+      rationale: Alex chose it after a week of load testing against two alternatives
+      category: integration
+      entities: [queue library]
+      created_at: "2026-04-12T09:00:00Z"
+  expected: [picked]
+
+- id: temporal-01
+  category: temporal
+  query: which vector store do we use now
+  distractors: 30
+  seed_facts:
+    - key: old
+      fact: Vectors are stored in sqlite-vec
+      rationale: one file and no daemon
+      category: architecture
+      entities: [vector store, sqlite-vec]
+      created_at: "2026-09-03T09:00:00Z"
+    - key: new
+      fact: Vectors moved from sqlite-vec to a hosted vector database
+      rationale: sqlite-vec cannot filter by scope inside the search, so every query over-fetched
+      category: architecture
+      entities: [vector store, sqlite-vec]
+      created_at: "2026-11-20T09:00:00Z"
+  expected: [new, old]
+
+- id: temporal-02
+  category: temporal
+  query: how long does the lookup cache hold an entry
+  distractors: 30
+  seed_facts:
+    - key: old
+      fact: The user lookup cache holds an entry for five minutes
+      rationale: the identical query was reaching the database hundreds of times a second
+      category: architecture
+      entities: [cache]
+      created_at: "2026-03-01T09:00:00Z"
+    - key: new
+      fact: The user lookup cache holds an entry for two minutes
+      rationale: five minutes served a renamed user for long enough that support raised it twice
+      category: architecture
+      entities: [cache]
+      created_at: "2026-08-01T09:00:00Z"
+  expected: [new, old]
+
+- id: temporal-03
+  category: temporal
+  query: how many failures open the circuit breaker
+  distractors: 30
+  seed_facts:
+    - key: old
+      fact: The circuit breaker opens after twelve consecutive failures
+      rationale: twelve was the count that matched the observed failure bursts at the time
+      category: constraint
+      entities: [circuit breaker]
+      created_at: "2026-02-10T09:00:00Z"
+    - key: new
+      fact: The circuit breaker opens after twenty consecutive failures
+      rationale: twelve was tripping on a dependency that was slow but healthy after its own deploys
+      category: constraint
+      entities: [circuit breaker]
+      created_at: "2026-07-10T09:00:00Z"
+  expected: [new, old]
+
+- id: temporal-04
+  category: temporal
+  query: how does a release move traffic to the new version
+  distractors: 30
+  seed_facts:
+    - key: old
+      fact: A release cuts traffic over to the new instances at once
+      rationale: it is the simplest move the load balancer will make
+      category: process
+      entities: [blue-green deploy]
+      created_at: "2026-01-15T09:00:00Z"
+    - key: new
+      fact: A release drains the old instances for ninety seconds before stopping them
+      rationale: the instant cut-over dropped in-flight requests on three releases running
+      category: process
+      entities: [blue-green deploy]
+      created_at: "2026-06-15T09:00:00Z"
+  expected: [new, old]
+
+- id: temporal-05
+  category: temporal
+  query: when do schema migrations run
+  distractors: 30
+  seed_facts:
+    - key: old
+      fact: Schema migrations run when the application starts
+      rationale: one command then deploys the code and the schema together
+      category: process
+      entities: [schema migration]
+      created_at: "2026-01-20T09:00:00Z"
+    - key: new
+      fact: Schema migrations run in a job that finishes before the application deploys
+      rationale: two replicas starting together raced for the same migration lock
+      category: process
+      entities: [schema migration]
+      created_at: "2026-05-20T09:00:00Z"
+  expected: [new, old]
+
+- id: negative-01
+  category: negative
+  query: run the tests
+  distractors: 30
+  seed_facts: []
+  expected: []
+
+- id: negative-02
+  category: negative
+  query: fix the typo in the readme
+  distractors: 30
+  seed_facts: []
+  expected: []
+
+- id: negative-03
+  category: negative
+  query: what time is it
+  distractors: 30
+  seed_facts: []
+  expected: []

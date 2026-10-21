@@ -1,0 +1,4 @@
+{"type": "user", "uuid": "03-01", "timestamp": "2026-09-20T10:01:00Z", "message": {"role": "user", "content": "for the blue-green deploy, do we drain the old pool or cut over immediately"}}
+{"type": "assistant", "uuid": "03-02", "timestamp": "2026-09-20T10:02:00Z", "message": {"role": "assistant", "content": "Both are possible. Draining takes about ninety seconds, cutting over is instant but drops in-flight requests."}}
+{"type": "user", "uuid": "03-03", "timestamp": "2026-09-20T10:03:00Z", "message": {"role": "user", "content": "Alex decided we drain. no other reason given, that is the call"}}
+{"type": "assistant", "uuid": "03-04", "timestamp": "2026-09-20T10:04:00Z", "message": {"role": "assistant", "content": "Implemented the drain: the old pool stops taking new connections and the switch happens once active connections reach zero or ninety seconds pass."}}

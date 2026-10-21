@@ -1,0 +1,144 @@
+{
+  "model": "haiku",
+  "n": 100,
+  "fn_rate": 0.14583333333333334,
+  "fp_rate": 0.2692307692307692,
+  "latency": {
+    "mean_latency_s": 10.234356068816268,
+    "p95_latency_s": 17.210314249969088
+  },
+  "misses": [
+    {
+      "id": "g-001",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Pushed. `THRESHOLD = 20` in `relay/jobs/queue_depth_breaker.py:17`."
+    },
+    {
+      "id": "g-007",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: Extracted to `_check_cohort_a_ceiling` at `relay/quota/opening.py:96`. Call site is now 3 lines. Two early returns replace the nesting."
+    },
+    {
+      "id": "g-008",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Done."
+    },
+    {
+      "id": "g-009",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Mechanically it's small \u2014 ~2 lines. Flip `wait_until_settled=False` to `True` and change the assertion to `[\"SENT\", \"SETTLED\"]`."
+    },
+    {
+      "id": "g-010",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: can you make the query shorter, we know that SELECT value::jsonb ->> 'rollup_mode' FROM settings WHERE name = 'runtime_flags' returns hourly so we can set directly"
+    },
+    {
+      "id": "g-011",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "assistant: Saved. The placement rule is generalizability, not call count."
+    },
+    {
+      "id": "g-012",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: Pushed: `1b9e44f0c2..7ad3e6b815`. The uncommitted deletion of `test_skips_record_without_link` is still local and unpushed."
+    },
+    {
+      "id": "g-014",
+      "label": "yes",
+      "answer": "malformed",
+      "window_head": "user: the pilot test failed is it because it's running in the same shard?"
+    },
+    {
+      "id": "g-024",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: can you create 2 other tickets related to REL-318 I want to split the implementation into linked and unlinked"
+    },
+    {
+      "id": "g-027",
+      "label": "yes",
+      "answer": "malformed",
+      "window_head": "user: for the dev toml, can't we have some dummy target_id (it doens't matter for local) so we don't have to set the setting n the test?"
+    },
+    {
+      "id": "g-038",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: ```python"
+    },
+    {
+      "id": "g-043",
+      "label": "yes",
+      "answer": "no",
+      "window_head": "user: I'm not particularly keen on adding an extra Verdict enum beyond the 3 that's already existed - is it not possible to not stamp a Verdict until the user has linked a source? or it won't work in the frontend? note that the frontend is not yet implemented so we can be flexible?"
+    },
+    {
+      "id": "g-063",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: the query and result is a bit confusing on the deepest_step. the deepest_step is tied to the user where as the order status is tied to an order."
+    },
+    {
+      "id": "g-068",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: **One trap to disarm before the pilot goes live:** `old_mode` \u2192 default sink is the *first* branch of `resolve_home_sink`. Your design keeps dual-writing `old_mode` at entry. Fix in REL-266, not REL-269."
+    },
+    {
+      "id": "g-072",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: Plain `git push` won't work \u2014 the base branch has diverged (local 140 ahead, origin 2 ahead), so it needs a force push. Option A undoes the merge and force-pushes only your PR branch. Option B force-pushes the base branch."
+    },
+    {
+      "id": "g-079",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: I get what you mean now, REL-231 is later and has more context right, so we should have the parent as 231 instead"
+    },
+    {
+      "id": "g-082",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: Found it. `_ARCHIVE_TARGET_KEYS` at `relay/archive/rotate.py:31` already holds those exact key-name strings."
+    },
+    {
+      "id": "g-086",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: cursor pagination or offset?"
+    },
+    {
+      "id": "g-091",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "assistant: All nine are already inside the 24 \u2014 a strict subset, no new users."
+    },
+    {
+      "id": "g-095",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: if we ever hit the provider rate limit we could add a retry budget with backoff"
+    },
+    {
+      "id": "g-096",
+      "label": "no",
+      "answer": "malformed",
+      "window_head": "user: <ide_opened_file>The user opened the file spec/sync/test_closure_hold.py in the IDE.</ide_opened_file>"
+    },
+    {
+      "id": "g-099",
+      "label": "no",
+      "answer": "yes",
+      "window_head": "user: can you add also a requirement to read the record kind from openapi backend if possible so we'd never have the record kind mismatch?"
+    }
+  ]
+}

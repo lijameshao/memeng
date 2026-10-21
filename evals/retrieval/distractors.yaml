@@ -1,0 +1,160 @@
+- fact: The rate limiter uses a token bucket per client key
+  rationale: a fixed window let a burst at the boundary send twice the limit in two seconds
+  category: architecture
+  entities: [rate limiter, token bucket]
+- fact: Retries are capped at three with exponential backoff
+  rationale: the upstream p99 is three seconds, so a fourth attempt almost never succeeds and only holds the worker
+  category: constraint
+  entities: [retry budget]
+- fact: Feature flags are read once at process start
+  rationale: reading them per request doubled the p50 on the hot path
+  category: process
+  entities: [feature flag]
+- fact: Deploys are blue-green with a ninety second drain
+  rationale: cutting over at once dropped in-flight requests during the previous three releases
+  category: process
+  entities: [blue-green deploy]
+- fact: Schema migrations run in a separate job before the application deploys
+  rationale: running them on application start made two replicas race for the same lock
+  category: process
+  entities: [schema migration]
+- fact: The circuit breaker opens after twenty consecutive failures
+  rationale: twelve was tripping on a slow but healthy dependency after its own deploys
+  category: constraint
+  entities: [circuit breaker]
+- fact: The cache for user lookups expires after five minutes
+  rationale: the same query was hitting the database hundreds of times a second
+  category: architecture
+  entities: [cache]
+- fact: The job queue deduplicates on message id for three attempts
+  rationale: producers retry on timeout and sent the same job twice under load
+  category: data_model
+  entities: [job queue]
+- fact: Integration tests run against a real database in a container
+  rationale: the in-memory fake accepted queries the real engine rejected
+  category: process
+  entities: [integration tests]
+- fact: The public API returns money as integer minor units
+  rationale: floating point rounding produced one-cent mismatches in reconciliation
+  category: data_model
+  entities: [public API]
+- fact: Application logs are kept for fourteen days and then dropped
+  rationale: ninety days of logs cost more than the two incidents a year that read past two weeks
+  category: constraint
+  entities: [log retention]
+- fact: Traces are sampled at one percent with every error trace kept
+  rationale: full sampling filled the trace backend in a day and the errors are the traces anyone opens
+  category: architecture
+  entities: [trace sampling]
+- fact: Every dependency is pinned to an exact version in the lock file
+  rationale: a patch release of a transitive dependency broke the build on a Friday with no code change
+  category: process
+  entities: [dependency pinning, lock file]
+- fact: All services live in one monorepo with a single build graph
+  rationale: a change that crossed three repositories needed three reviews and landed out of order twice
+  category: architecture
+  entities: [monorepo]
+- fact: List endpoints paginate with an opaque cursor rather than an offset
+  rationale: offset pages skipped rows when a write landed between two requests
+  category: business_logic
+  entities: [pagination, cursor]
+- fact: Every write endpoint accepts an idempotency key and returns the first result on a repeat
+  rationale: a client timeout followed by a retry created two records for one user action
+  category: business_logic
+  entities: [idempotency key]
+- fact: Background jobs are killed after ten minutes
+  rationale: one stuck job held a worker for six hours and the queue backed up behind it
+  category: constraint
+  entities: [background job, job timeout]
+- fact: The health check returns a plain two hundred and checks no dependency
+  rationale: checking the database in the health endpoint took the whole fleet out when one replica was slow
+  category: integration
+  entities: [health check]
+- fact: Service configuration is a single TOML file per environment
+  rationale: the YAML files grew anchors and overrides that nobody could read at a glance
+  category: process
+  entities: [config file, TOML]
+- fact: Secrets reach the process as environment variables injected at start
+  rationale: a secret in a config file was committed twice and had to be rotated both times
+  category: integration
+  entities: [secrets, environment variables]
+- fact: The connection pool holds twenty connections per instance
+  rationale: fifty instances at a hundred connections each exceeded what the database would accept
+  category: constraint
+  entities: [connection pool]
+- fact: Reporting queries run against a read replica
+  rationale: a long analytics scan on the primary blocked writes for ninety seconds
+  category: architecture
+  entities: [read replica]
+- fact: Records are soft deleted with a deleted_at column
+  rationale: support could not restore a record that a customer deleted by mistake
+  category: data_model
+  entities: [soft delete]
+- fact: Primary keys are UUIDs generated by the application
+  rationale: sequential integers leaked row counts to anyone who read a URL
+  category: data_model
+  entities: [primary key, UUID]
+- fact: Every timestamp is stored in UTC and rendered in the viewer time zone
+  rationale: local timestamps from two regions could not be ordered against each other
+  category: data_model
+  entities: [timestamp, UTC]
+- fact: Errors return a code, a message and a request id in one envelope
+  rationale: clients were parsing free text messages and broke when the wording changed
+  category: business_logic
+  entities: [error envelope, request id]
+- fact: Retry delays carry full jitter over the backoff window
+  rationale: clients that backed off on the same schedule retried together and repeated the spike
+  category: architecture
+  entities: [retry jitter, backoff]
+- fact: Each tenant gets its own worker pool with a fixed size
+  rationale: one tenant's bulk import consumed every worker and stalled the other tenants
+  category: architecture
+  entities: [bulkhead, worker pool]
+- fact: Request bodies larger than one megabyte are rejected at the edge
+  rationale: a client uploading whole files to a JSON endpoint exhausted memory on the receiving instance
+  category: constraint
+  entities: [request size limit]
+- fact: Container image builds cache the dependency layer separately from the source layer
+  rationale: a one line source change was rebuilding every dependency and took eleven minutes
+  category: process
+  entities: [image build, build cache]
+- fact: Staging data is refreshed weekly from an anonymised production snapshot
+  rationale: hand-made staging rows never reproduced the shapes that broke production
+  category: process
+  entities: [staging data]
+- fact: A release goes to five percent of traffic for thirty minutes before the rest
+  rationale: two releases in a row needed a rollback and the error was visible within ten minutes
+  category: process
+  entities: [canary release]
+- fact: Alerts fire on error rate over one percent for five minutes, not on a single failure
+  rationale: single failure alerts paged four times a night and were all transient
+  category: constraint
+  entities: [alert threshold, error rate]
+- fact: The on-call rotation is one week long with a handover note
+  rationale: two day shifts meant nobody saw a slow-building problem through to its cause
+  category: process
+  entities: [on-call rotation]
+- fact: A code owners file routes each directory to the team that maintains it
+  rationale: reviews were going to whoever was free and changes landed without the team that owned them
+  category: process
+  entities: [code owners]
+- fact: Pull requests over four hundred changed lines are split before review
+  rationale: review comments per line fell sharply on larger pull requests and defects went through
+  category: process
+  entities: [pull request size]
+- fact: The test suite runs on eight parallel workers grouped by file
+  rationale: a serial run took nineteen minutes and people stopped waiting for it
+  category: process
+  entities: [test parallelism]
+- fact: A test that fails twice in a week is quarantined and its owner is notified
+  rationale: a red suite from known flaky tests trained everyone to rerun instead of reading the failure
+  category: process
+  entities: [flaky test, quarantine]
+- fact: Snapshot tests are limited to rendered output and never to internal structures
+  rationale: structural snapshots changed on every refactor and were updated without being read
+  category: process
+  entities: [snapshot test]
+- fact: Tests take the clock as an injected function rather than reading it directly
+  rationale: a test that slept to cross a boundary was the slowest and the least reliable in the suite
+  category: integration
+  entities: [clock, test seam]

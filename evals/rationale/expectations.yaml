@@ -1,0 +1,10 @@
+- transcript: 01-explicit-reason.jsonl
+  expect_stored: true
+- transcript: 02-no-reason.jsonl
+  expect_stored: false
+- transcript: 03-named-person.jsonl
+  expect_stored: true
+- transcript: 04-reason-in-tool-result.jsonl
+  expect_stored: true
+- transcript: 05-debugging-chatter.jsonl
+  expect_stored: false

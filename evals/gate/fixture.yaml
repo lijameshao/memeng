@@ -1,0 +1,1088 @@
+# Windows are shaped after real Claude Code sessions: terse user turns, typos,
+# tool results between turns, a reason given a turn after the decision, and
+# decisions not to do something. Every module, path, enum, identifier, ticket
+# key, number and name is invented; only the conversation shape is kept.
+# Labels are hand-set.
+
+- id: g-001
+  label: yes
+  window: |
+    assistant: Pushed. `THRESHOLD = 20` in `relay/jobs/queue_depth_breaker.py:17`.
+
+    Note on the commit message: my first draft claimed a reason for 20 that you never gave me. I amended it to just the subject line before pushing. If you have the real reason for 20, tell me and I'll add it to the pull request body.
+
+    user: rationale is because looking at historical queue volume, max we get is 600 per month of accepted jobs, so it works out 20 per day
+
+    actually can you raise it to 40 instead
+
+    user: [tool result] JOB_NAME = "queue_depth_breaker_check"
+    THRESHOLD = 40
+
+- id: g-002
+  label: no
+  window: |
+    assistant: Done. Workspace is clean apart from the two fixed files. Applied the fix and re-ran it here: `spec/vendor/test_feed_client.py` — 87 passed.
+
+    user: yes commit push
+
+    user: [tool result] ruff check...............................................................Passed
+    ruff format..............................................................Passed
+    custom lint..............................................................Passed
+
+- id: g-003
+  label: yes
+  window: |
+    assistant: **Question 1 of ~3 — what should the fixed upper bound of the size picker be, once the per-band caps arrive?**
+
+    Right now the picker ceiling moves with the selected band. If we stop moving it per band we need one fixed ceiling. The options:
+
+    - **A. `caps.hard_max`** — the same fixed value the picker already uses before the per-band caps exist.
+    - **B. The largest per-band cap** — floored to the step grid.
+
+    user: Should be B, because post-review spaces are potentially capped so they can't go higher than the highest per band cap
+
+    assistant: **B it is** — fixed ceiling = the largest per-band cap, grid-floored and clamped to the minimum.
+
+- id: g-004
+  label: no
+  window: |
+    user: can you check out to that branch so we can continue working on it
+
+    user: [tool result] * branch                  wt-agent-7f1c09e2b44d -> FETCH_HEAD
+    ---LOCAL---
+    c41a7d02e9
+    ---REMOTE---
+    c41a7d02e9
+    ---AHEAD/BEHIND (local...remote)---
+    0	0
+
+    assistant: Checked out. Local and remote both at `c41a7d02e9`, nothing ahead or behind.
+
+- id: g-005
+  label: yes
+  window: |
+    assistant: The retry endpoint has two paths. Only the allowlist at `relay/dispatch/outbox.py:212` blocks these operations on the external path. Adding `PUBLISH`, `REFRESH_INDEX` and `SEND_DIGEST` to the allowlist covers all three.
+
+    user: for further info we don't want to do PUBLISH retries because of fear of double publishes
+
+    assistant: Plan updated — `PUBLISH` dropped, leaving `REFRESH_INDEX` and `SEND_DIGEST`:
+
+    1. Add the two operations to the allowlist.
+    2. Derive `kind` for `SEND_DIGEST` from the audit row.
+
+- id: g-006
+  label: yes
+  window: |
+    user: what's the logic for if job.profile:
+            return False
+    I thought we only put jobs in the pilot if they're marked as such? or it's a guard so that those already in is not put in again
+
+    user: [tool result] === stamps ===
+    relay/shadow/run.py:41:            {"old_mode": True, "profile": Profile.SHADOW},
+    relay/pilot/entry.py:77:    if job.profile:
+
+    assistant: The second. Ranking runs more than once for a job — at intake, and again when the worker retries after a crash. Without the guard the retry re-rolls the profile and can move a job out of the pilot it already sits in. It covers both a shadow-run stamp and an earlier pilot stamp.
+
+- id: g-007
+  label: no
+  window: |
+    assistant: Extracted to `_check_cohort_a_ceiling` at `relay/quota/opening.py:96`. Call site is now 3 lines. Two early returns replace the nesting.
+
+    user: cna you make it non private and name it pilot specific and avoid referencing cohort A if possible (as it's hard to knwo what cohort A means) validate_pilot_baseline_ceiling_by_band
+
+    user: [tool result] relay/quota/opening.py | 38 ++++++++++++-----
+     1 file changed, 29 insertions(+), 9 deletions(-)
+
+- id: g-008
+  label: yes
+  window: |
+    assistant: Done.
+
+    - **Committed** `5e02c7a1d9` — "Move single-use seed_dispatched_event into throttle bypass test" (2 files). Pre-commit hooks passed.
+    - **Pushed** to `feat/throttle-bypass`.
+
+    user: it's not because they're single use, it's to do with how generalised they can be, getting a row by trace_id although currently it's single use, it can be used for others various reasons, whereas the seed_dispatched_event, is kind of tailored towards throttling
+
+    assistant: Got it — that's a sharper and more correct criterion than the one I used. The dividing line is **how generalizable the helper is**, not how many call sites it has today. `rows_by_trace_id` is a generic query primitive and stays in `spec/helpers.py`. `seed_dispatched_event` encodes throttle-specific setup, so it lives with the bypass test.
+
+- id: g-009
+  label: no
+  window: |
+    assistant: Mechanically it's small — ~2 lines. Flip `wait_until_settled=False` to `True` and change the assertion to `["SENT", "SETTLED"]`.
+
+    user: ok that's fine
+
+    for
+
+    def seed_dispatched_event(
+        client,
+        space_id,
+        kind="EXPORT",
+        size=3,
+        sink=Sink.MAIN,
+        at=None,
+    ):
+
+    I think it should live in the test_throttle_bypass instead of the spec helpers, because it's specifically used to test throttling
+
+    assistant: Let me check where `seed_dispatched_event` is actually used before agreeing — if it's shared across test files, moving it into one test file would be worse.
+
+- id: g-010
+  label: no
+  window: |
+    user: can you make the query shorter, we know that SELECT value::jsonb ->> 'rollup_mode' FROM configs WHERE name = 'runtime_flags' returns hourly so we can set directly
+
+    assistant: ```sql
+    UPDATE feeds f
+    SET meta = f.meta || '{"rollup_mode": "hourly"}'::jsonb,
+        updated_at = timezone('utc', now())
+    WHERE f.kind = 'basic'
+      AND f.closed_at IS NULL
+      AND (f.meta ->> 'rollup_mode') IS NULL;
+    ```
+
+- id: g-011
+  label: yes
+  window: |
+    assistant: Saved. The placement rule is generalizability, not call count.
+
+    user: can you remove this comment?
+    # Moves into our own staging targets are not an external-transfer risk.
+
+    this is technically not true, because we're not whitelisting a specific target
+
+    user: [tool result] The file relay/throttle/rules.py has been updated successfully.
+
+    assistant: Removed. The bypass is keyed on the operation, not on the destination, so the comment described a guarantee the code does not make.
+
+- id: g-012
+  label: no
+  window: |
+    assistant: Pushed: `1b9e44f0c2..7ad3e6b815`. The uncommitted deletion of `test_skips_record_without_link` is still local and unpushed.
+
+    user: what's the  test_skips_record_without_link? was it because it was unecesesary I can't remember the reason
+
+    user: [tool result] === the deleted test (from HEAD) ===
+    241:def test_skips_record_without_link(ready_record):
+    242-    """
+    243-    The full check is fed by the linked source, so a record with no live link
+    244-    stays rejected until it links.
+    245-    """
+
+- id: g-013
+  label: yes
+  window: |
+    assistant: Correct. By default the tests never load a model. `SCORER_BUILD` is set in `conf/live.toml:210` but absent from `conf/dev.toml`, so in tests `scorer_value` returns None at its first guard.
+
+    user: so we should really add that to the dev toml right?
+
+    assistant: No — on its own it would break the suite, not improve it.
+
+    Setting `SCORER_BUILD` in `dev.toml` makes `scorer_value` attempt `_ensure_loaded()` on every ranking test. There is no model to load locally:
+
+    - Under `ranking_stubs`, `blob_client` is a bare `MagicMock` → empty buffer → `EOFError`.
+    - Outside it, `blob_client` returns `LocalBlobClient`, which has no `fetch_into` at all → `AttributeError`.
+
+- id: g-014
+  label: yes
+  window: |
+    user: the pilot test failed is it because it's running in the same shard?
+
+    assistant: Yes — same shard means same pytest process, which is the only way `settings` is shared. Three things had to hold:
+
+    1. **Same shard.** Shard 41 ran both files in one process.
+    2. **Order.** `spec/rank/test_scorer.py` ran at ~62% of the shard, `spec/pilot/test_entry.py` at ~97%.
+    3. **The victim reaches the code.** The endpoint tests execute the scorer guard.
+
+    Fix: the fixture now goes through `patch_setting` instead of writing `settings` directly. `SCORER_BUILD` was never in `dev.toml`, so on exit the key is popped rather than restored — back to unset, which is the guard that keeps the scorer off in tests.
+
+    user: ok
+
+- id: g-015
+  label: yes
+  window: |
+    assistant: That `MagicMock` test parametrizes over four missing fields, and `at_time` can only produce one of them.
+
+    user: do both
+
+    in general, we should avoid mocking
+
+    with the exception
+    patch("relay.alerts.reporter") as mock_reporter,
+        ):
+
+    is fine because we're just checking call_args
+
+    assistant: Doing both. Let me read the current state of the job test file to edit precisely.
+
+- id: g-016
+  label: no
+  window: |
+    user: in general we should avoid mocking in this repo
+
+    assistant: Understood. I'll replace the two patched tests with real setup.
+
+- id: g-017
+  label: yes
+  window: |
+    assistant: Yes — **the marker is the sole gate.** There's no separate "was this already sent?" check anywhere. The population comes from `held_records_for_space(space_id)` and we layer on the unmarked filter, so on a rerun a row already carrying the marker is excluded entirely.
+
+    user: yes I thin kwe should notify first then mark
+    and yes we should not send to rows already marked dormant
+
+    assistant: Locked:
+    - **Notify first, then mark** (mark only once the send is enqueued; a sender that early-returns leaves the row unmarked so the next run retries it).
+    - **Gate** excludes both `Held` and `Dormant` markers.
+
+- id: g-018
+  label: no
+  window: |
+    assistant: Merge conflict resolved and the merge is committed. One conflicted file, add/add, because your branch was built on a local commit of the same work that main has merged.
+
+    user: push, then
+
+    can you also add a docstring for this function
+    def send_space_closure_notice(record, closes_on) -> bool:
+
+    saying we're returning a bool to denote if the notice was enqueued - because the function name itself is not very intention revealing why bool was retruned.
+
+    assistant: I'll push first, then add the docstring.
+
+- id: g-019
+  label: yes
+  window: |
+    assistant: Correct. The `and` short-circuits: a mismatched arm only calls `blocks_new_pilot_entry`, and the return happens only if that is `True` — breaker set to `HOLD`, `INSPECT` or `BYPASS` for the space.
+
+    Breaker off: the crossing still happens, but nothing is skipped. The job enters the new arm and the stale value is overwritten.
+
+    user: ok it's not likely that we have circuit breaker on so it's an edge case we can live with
+
+    assistant: Agreed. Two conditions have to coincide — a cohort crossing on re-run *and* an active breaker — and the outcome is "no entry", which is what the breaker wants anyway.
+
+- id: g-020
+  label: no
+  window: |
+    user: merge feat/closure-notice in to this branch so we it's most updated
+    then push
+
+    assistant: I'll use the sync-branch skill for this, since it handles fetching the branch, merging, and resolving any conflicts.
+
+    user: [tool result] Launching skill: sync-branch
+
+- id: g-021
+  label: yes
+  window: |
+    assistant: I've got the exact code. Short answer: **I'd keep it at the top** — moving it down to line 187 has real consequences.
+
+    Moving `_reject_if_frozen` to just above `if weeks > order.max_span` puts it **below the expiry early-return** (lines 174–179). An expired order would then return "expired" instead of "frozen", and the regression test we just wrote goes red.
+
+    user: ok keep as it is
+
+    assistant: Keeping it at line 169 as-is. Nothing to change.
+
+- id: g-022
+  label: no
+  window: |
+    assistant: Confirmed the call graph. They enforce the same rule but guard different entry points — not pure duplicates.
+
+    user: ok makes sense
+
+    for     _reject_if_frozen(order, body)
+
+    shall we move closer to other FrozenError
+
+    like above  if weeks > order.max_span?
+
+    so we check for expiry first ?
+
+    assistant: Let me re-read the current `finalise_order` body precisely to reason about the reorder accurately.
+
+- id: g-023
+  label: yes
+  window: |
+    assistant: I checked frontend PR #412 against backend #97. The frontend handles the shape change correctly for the common case.
+
+    user: the frontend should read from the backend on floor_count, but fallback to frontend calculation only as a fallback - can you make a comment on the forntend PR so we can change accoardingly?
+
+    assistant: Good call — that keeps the floor as a single source of truth. I'll post an inline review comment on the frontend PR.
+
+- id: g-024
+  label: no
+  window: |
+    user: can you create 2 other tickets related to REL-318 I want to split the implementation into linked and unlinked
+
+    This PR will target the linked case, but don't remove the changes for the unlinked, so that when I use another agent, it can copy from this PR first before we remove
+
+    assistant: I'll create the two tickets, link them, and record the intent in each. I will **not** touch any code or the PR title.
+
+- id: g-025
+  label: yes
+  window: |
+    assistant: Ticket rewritten. New title: "Serve the floor from the backend for un-submitted sizes and delete the app-side formula". Plan is 9 steps, split backend 1-4 and app 5-9.
+
+    user: actually thinking deeper, if the ticket is about allowing the picker to recompute the floor on the picker by calling it each time, I think having it in the frontend logic may be better, so we're not constantly caling the backend
+
+    assistant: **Reasonable, and cheaper than I framed it.** The zero short-circuit at `AmountPicker.tsx:41` already covers the baseline case locally, so the local formula plus that guard is correct today.
+
+- id: g-026
+  label: no
+  window: |
+    user: run the tests
+
+    user: [tool result] 141 passed in 3.92s
+
+    assistant: all 141 pass.
+
+    user: and lint
+
+    user: [tool result] lint: 0 errors
+
+    assistant: clean.
+
+- id: g-027
+  label: yes
+  window: |
+    user: for the dev toml, can't we have some dummy target_id (it doens't matter for local) so we don't have to set the setting n the test?
+
+    assistant: Yes. I tried it.
+
+    Put the same dummy ids `stub_backend.py:88-91` already hardcodes into `conf/dev.toml`, then delete the `settings[key] = ...` line. Result: 4 passed. Remove the four `elif` lines again and it still fails, so the test keeps its teeth.
+
+    It also matches convention. The mirror keys already carry the same dummy id in both files (`dev.toml:52-54` and `stub_backend.py:80`).
+
+    user: yes make the change
+
+- id: g-028
+  label: no
+  window: |
+    user: yes make the change
+
+    assistant: API Error: 529 Overloaded. This is a server-side issue, usually temporary — try again in a moment.
+
+    user: try again
+
+- id: g-029
+  label: yes
+  window: |
+    assistant: Two things in the ticket don't match the code, and one is a real decision. Option A: make the step check band-aware in the operator validator only. Option B: push the check down into the shared model so every caller gets it.
+
+    user: is this change only affects the operator endpoint? if so we can have OptionA, as only operators (small number of operators will go through that path)
+
+    assistant: Option A, conditional on it being operator-only. Verifying the blast radius before proceeding.
+
+- id: g-030
+  label: no
+  window: |
+    assistant: Confirmed. Here's the situation, and there's one decision to make before I write anything.
+
+    user: Option A
+
+    assistant: Option A it is — rebase this branch onto PR #61's branch, then add the one-line change plus a client test.
+
+- id: g-031
+  label: yes
+  window: |
+    assistant: Branch `relay/dispatch/outbox.py:640` is exercised in production only via the main sink. The mirror route reuses the same webhook branch.
+
+    user: FYI SEND_DIGEST through the mirror route is not battle tested, it's a new feature
+
+    I think for record purpose we'd want to be sure that
+    1. move from source queue to the staging queue is recorded properly - and that the audit log records that move properly
+    2. I'm less concerned if the sweep from staging to the sink fails because we can always retry, but we need to be able to handle the bounces and have record
+
+    assistant: Two corrections taken on board. Nothing in the mirror path is proven prior art, so it gets first-class coverage. The audit log is the record for leg one; leg two is retryable but every bounce must land in the audit log too.
+
+- id: g-032
+  label: no
+  window: |
+    user: yes create those 4 tickets now and yes with 204 as parent
+
+    what's REL-231
+
+    user: [tool result] Launching skill: file-ticket
+
+- id: g-033
+  label: yes
+  window: |
+    user: is the import    from relay.jobs.drip import next_message_key
+
+    in test test_next_message_skips_when_start_is_past_horizon
+    need to be inline because of circular? if not can we make it top level impott
+
+    assistant: Not circular. Hoisted that one. The other eleven inline imports in the file stay where they are: `relay.jobs` builds the worker app at import time, and this module is collected before the app fixture binds the settings, so a top-level import of anything under `jobs` fails collection.
+
+- id: g-034
+  label: yes
+  window: |
+    assistant: Short answer is **yes, keep the `audit.verdict` guard**, but for a more concrete reason than "the value changes".
+
+    The guard is what scopes the field to pilot jobs at all. `ceiling_by_band` exists on **every** job, not just pilot ones. Drop the guard and every standard job starts reporting a pilot cap.
+
+    user: leave it as it is, don't need to guard accept
+
+    assistant: Leaving it as-is. The guard stays `if audit and audit.verdict:`, firing for any verdict including `FLAGGED`, consistent with the enforcement side.
+
+- id: g-035
+  label: no
+  window: |
+    assistant: Both automated review passes returned "No issues found", zero unresolved inline comments, CI green.
+
+    user: create a ticket so it can be implemented separately
+
+    assistant: I'll verify the exact mobile location first so the ticket is precise, then create it.
+
+- id: g-036
+  label: yes
+  window: |
+    assistant: `test_closure_export_keeps_held_record` is written and passing, parametrized on the hold flag.
+
+    user: can you make the test not just for delta_only and full_export, can we do it as a test param so that tests can specify what space settings they want ot put in?
+
+    assistant: Makes sense — I'll turn the export config into a parametrize axis (a dict of space settings). One caveat I'll bake into the docstring: the hold-on assertion only holds for **guarded** export paths — a hold-blind legacy config placed here would (correctly) fail, surfacing the gap.
+
+- id: g-037
+  label: no
+  window: |
+    assistant: PR #233 now reports `mergeable=MERGEABLE`. `mergeState=BLOCKED` is expected right after a push: CI hasn't run on the new commit yet.
+
+    user: the test is failing because it takes too long to run, is there anyway you can either optimise the test we've added or group test and split them in a separate file?
+
+    assistant: Before optimising, let me confirm what's actually failing — "too long" could be a per-file timeout, a shard budget, or something else.
+
+- id: g-038
+  label: yes
+  window: |
+    assistant: ```python
+    """
+    A missing table row raises downstream instead of rejecting, so a partial set
+    resolves to None. Taking the latest version mirrors the max(versions) that
+    rollout pins onto a space.
+    """
+    ```
+
+    user: remove this bit of comment?
+    " Taking the latest version mirrors the max(versions) that
+        rollout pins onto a space.
+    "
+
+    as it can get stale and couples to the rollout process in the coment?
+
+    user: [tool result] The file relay/rank/tables.py has been updated successfully.
+
+- id: g-039
+  label: no
+  window: |
+    assistant: But "small-space arm" is a bad name, because three different things in this code carry that name: the deck row, the flag, and the prefilter branch.
+
+    user: don't use numbers because it can get stale. I'm more interested in why have we added this at all in the firwt olfe
+
+    user: [tool result] 3f7c21a0d8 Reject the size ceiling in the prefilter
+
+    diff --git a/relay/policy/prefilter.py b/relay/policy/prefilter.py
+
+- id: g-040
+  label: yes
+  window: |
+    assistant: Done — swapped to `order.verdict == Verdict.WAITING` in `relay/handlers/client_view.py:77`. 16/16 tests pass.
+
+    user: align the two
+    also new information WAIT_DAYS - the order expires the same number of days as normal order, so 7 days, so we don't need extra logic and give users extra time
+
+    user: [tool result] spec/pilot/test_entry.py:311:    _age_the_wait(record, days=Settings.WAIT_DAYS + 1)
+    spec/pilot/test_entry.py:333:    _age_the_wait(record, days=Settings.WAIT_DAYS - 1)
+
+- id: g-041
+  label: yes
+  window: |
+    assistant: **Baseline has no wait window — because baseline never waits.** Its link requirement is a pre-intake gate: a hard 400 at `relay/handlers/intake.py:203`. There's no half-finished order sitting anywhere, so nothing to time out.
+
+    The window exists only because *our* design creates a state baseline doesn't have — an order that's `OPEN` but waiting on the user.
+
+    user: yes match baseline behaviour
+
+    user: [tool result] The file notes/2026-07-14-link-gate.md has been updated successfully.
+
+- id: g-042
+  label: no
+  window: |
+    assistant: Notes updated. One supersession you should know about: the notes recorded a mechanism agreed earlier that this design replaces.
+
+    user: yes update
+
+    user: [tool result] {"issues":{"nodes":[{"key":"REL-277","fields":{"summary":"Mobile: route waiting orders to the link screen"}}]}}
+
+- id: g-043
+  label: yes
+  window: |
+    user: I'm not particularly keen on adding an extra Verdict enum beyond the 3 that's already existed - is it not possible to not stamp a Verdict until the user has linked a source? or it won't work in the frontend? note that the frontend is not yet implemented so we can be flexible?
+
+    assistant: Option 1 was your original design. Verified both: stamping nothing works, and the poller ignores unstamped rows.
+
+    user: yes revert to stamp nothing
+
+    assistant: Switching to stamp-nothing. Three verdict values stay as they are; a waiting order simply has no verdict yet.
+
+- id: g-044
+  label: no
+  window: |
+    assistant: Two things still open:
+
+    1. **Judgement call 1** — the `_place_order` helper, used at 17 call sites.
+    2. **Push.** Branch is 2 commits ahead.
+
+    user: fine inline it
+
+    user: [tool result] 402:def _place_order(client, record, build=None):
+
+- id: g-045
+  label: yes
+  window: |
+    assistant: **What the dual-write question is about:**
+
+    When the shadow run enters a job, it writes two properties that mean the same thing: the old boolean `old_mode: true` and the new `profile: "shadow"`. The old key survives because outside readers still query it — the analytics warehouse and the quota SQL that sums all jobs where `old_mode = 'true'`.
+
+    user: yes makes sense we should only have profile pilot written and not the dual write
+
+    user: [tool result] The file notes/pilot-design.md has been updated successfully.
+
+- id: g-046
+  label: no
+  window: |
+    assistant: Handover prompt for the agent — paste as-is:
+
+    > Work on the branch `feat/rel-118` (it exists on origin; base your work on it and push there).
+
+    user: no we don't want to work on branch feat/rel-118 , we want to work on this current branch, and base the change on top of it, using feat/rel-118  as the base branch
+
+    assistant: Corrected handover — stay on the workspace's current branch, rebase on top of `origin/feat/rel-118`, do not commit to it directly.
+
+- id: g-047
+  label: yes
+  window: |
+    user: so is the old evaluator run regardless?
+    since _shadow_compare would be run later on/
+
+    assistant: **Yes. The old evaluator runs on every order, unconditionally.**
+
+    `verdict = OldEvaluator(**kwargs).run()` at `relay/handlers/intake.py:118` has no gate on it. The fresh one runs *in addition*, at the end, and only wins when it matches. Mismatch or exception → the old dict is returned (`:240`, `:251`).
+
+    That is deliberate. It's compare mode: the old evaluator stays the source of truth until the fresh one has agreed with it in production for long enough to trust.
+
+- id: g-048
+  label: no
+  window: |
+    assistant: **PR #158** — "Add scorer module", merged 2026-02-03. That PR created the `_fake_blob` fixture writing both setting keys directly, no teardown. The bug has been latent for ~5 months.
+
+    user: that was ages ago, you sure that's the reason
+
+    assistant: Fair challenge. Let me check rather than assert.
+
+- id: g-049
+  label: yes
+  window: |
+    assistant: **REL-290 created:** Make the fresh evaluator ruleset-aware. Left in the backlog.
+
+    user: also on this , since we have an alert if the two verdicts disagree, can we gate the pilot entry to look for db feature flag that pilot_version = v1  (or some similar naming - look at the convention in the codebases)
+
+    user: [tool result] beta_banner_version | string | ['off', 'v1'] | Beta Banner Version
+    workspace_menu_version | string | ['off', 'v1'] | Workspace Menu Version
+
+    assistant: Convention is `<feature>_version` with values `off` and `v1`. Adding `pilot_version`, read once per order, so entry can be switched off from the database the moment the disagreement alert fires.
+
+- id: g-050
+  label: no
+  window: |
+    user: can you /save-notes pilot on the additoinal tickets, so that we're aware
+
+    user: [tool result] Launching skill: save-notes
+
+- id: g-051
+  label: yes
+  window: |
+    assistant: **No — the four pilot targets are the only blank-in-stage entries that reach `list_primary_targets`.** The filter in the return exists only to skip those blanks.
+
+    user: ok can you set some dummy values for stage and we can drop the filter in the return
+
+    user: [tool result] conf/stage.toml:64:ARCHIVE_PILOT_INBOX = ''
+    conf/stage.toml:65:ARCHIVE_PILOT_OUTBOX = ''
+
+- id: g-052
+  label: no
+  window: |
+    user: forget about the segment, group and user level, check that from the code and see if we've got a code that writes those runtime_flags, because it's unlikely that we'd set them outside of the code at such granular level
+
+    user: [tool result] relay/handlers/people.py:143:        Update runtime_flags for user (operator only, requires approval)
+    relay/handlers/people.py:171:        # Update runtime_flags in database
+
+- id: g-053
+  label: yes
+  window: |
+    assistant: **Not your PR's invention — it copied the neighbour.** That exact 12-patch stack already exists at `spec/intake/test_gather.py:302`. Repo-wide maximum patch-stack depth is 12, in that one file.
+
+    user: can we drive the order through place_order , so it's closer to E2E test, and also assert and compare the result from the old evaluator give the same result as the fresh evaluator
+
+    assistant: Swapping the 12-stub unit test for one that drives `client.post("/orders")`. Two arms, and the assertion is that both evaluators agree.
+
+- id: g-054
+  label: yes
+  window: |
+    user: I still feel like
+    if ruleset and not ruleset.may_lift:
+                self.lift_ceiling = False
+
+    is wrong  because we're overriding whatever value was in place
+
+    assistant: Agreed, and the caller already passes the value: `kwargs["lift_ceiling"] = ceiling_call["lift"]` at `relay/handlers/intake.py:114`. The evaluator must not override an input it was handed. Passthrough instead, with `may_lift` read where the call is made.
+
+- id: g-055
+  label: no
+  window: |
+    user: so the assert of lift_ceiling is the output of the gather_facts?
+
+    assistant: Yes.
+
+    ```python
+    facts, overrides = gather_facts(..., lift_ceiling=True)
+    assert facts.lift_ceiling is True
+    ```
+
+    `facts` is the `FactBundle` that `gather_facts` returns. So the test reads: **what went in came out.**
+
+- id: g-056
+  label: no
+  window: |
+    user: can we stack on top of  PR 305 then? so we can assume that Ruleset.may_lift is merged?
+
+    user: [tool result] === 305 base/state ===
+    {"base":"main","head":"feat/ruleset-may-lift","mergeable":"MERGEABLE","state":"OPEN"}
+
+- id: g-057
+  label: yes
+  window: |
+    assistant: Done. Pull request 298 now holds one commit on top of main. New `hard_stops_fresh` in `relay/fresh/rules.py`.
+
+    user: we cannot treat the ticket as the golden source on what to apply, it may not be best
+
+    why do we need to copy the hard_stops_fresh as the same as hard_stops when we can just import it?
+    check how other functions does it?
+
+    user: [tool result] === who imports the old module
+    relay/handlers/intake.py:22:from relay.old import (
+    === what fresh imports from old
+    (nothing)
+
+    assistant: None of the fresh functions import from `old`. That is the rule the package follows: `old` is the module deleted at the end of the cutover, so anything under `fresh/` that imported it would go down with it. The copy stays.
+
+    user: ok fine keep the copy
+
+- id: g-058
+  label: no
+  window: |
+    user: commit push and open pr,, with the same ticket num as the original PR
+
+    user: [tool result] Launching skill: open-pr
+
+- id: g-059
+  label: no
+  window: |
+    user: ERROR: canceling statement due to conflict with recovery
+      Detail: User query might have needed to see row versions that must be removed.
+
+    assistant: The read replica cancelled the query. Rerun it with a 7-day window instead of 90, or run it against the primary.
+
+- id: g-060
+  label: yes
+  window: |
+    assistant: Done in `spec/pilot/test_entry.py:88`. Docstring now opens with what cohort A is.
+
+    user: can we also name this test_prefilter_breaker_blocks_cohort_crossing
+
+    test_pilot_breaker_blocks_cohort_crossing
+
+    so we make a clear distinction between the pilot and another vendor product
+
+    user: [tool result] spec/seed.sql:1402:    (gen_random_uuid(), 'pilot_prefilter_breaker', 'Pilot prefilter breaker', '*/10 * * * *', TRUE),
+
+    assistant: Renamed. The breaker is pilot-only; the vendor product has its own breaker with a different threshold, so a shared name would suggest one gate where there are two.
+
+- id: g-061
+  label: yes
+  window: |
+    user: why do we need mock and patch?
+       timetable = MagicMock(interval=7, next_run=date(2026, 3, 9))
+        with (
+            patch("relay.alerts.timetable", return_value=timetable) as mock_timetable,
+
+    is it because realistical
+
+    assistant: Yes — that's exactly it. These three are the branches that **valid production data can't produce**, so there's no real state to set up.
+
+    The proof is right next to it: the render test calls `send_alert(record, ...)` **with no mocks at all** and it enqueues successfully.
+
+- id: g-062
+  label: no
+  window: |
+    assistant: Yes — add a `deepest_step` CTE that computes each user's max step ordinal, then map it to a label. Not run.
+
+    user: can you check the query if there's something incorect, some users with verdict APPROVED doesn't have deepest_step, which is odd, because they'd at least reasch confirm / done step?
+
+    assistant: My hypothesis: the cohort admits users via any `pilot/%` event, but the CASE only maps a specific list. Let me enumerate the real event names.
+
+- id: g-063
+  label: yes
+  window: |
+    user: the query and result is a bit confusing on the deepest_step. the deepest_step is tied to the user where as the order status is tied to an order.
+
+    can we have the deepest step, only for pilot orders? and each row is for deepest step for that order, so a user with multiple orders wil lhave multiple order steps
+
+    assistant: That's the right critique — step events are per-user, status is per-order. To make each row an order I need to attribute step events to a specific order. First I have to check whether the events even carry an order identifier.
+
+- id: g-064
+  label: yes
+  window: |
+    user: def _id_text(cls, v: UUID | str | None) -> str | None:
+            return str(v) if v else v
+
+    is it possible that the uuid doesn't have dash in them so the str represetnation can be inconsistent between different uuids?
+
+    assistant: No, and no normalisation is needed here. `str()` on a `UUID` always emits the dashed form, and the only string inputs reach this model from the database, where the column type is `uuid`, so they arrive dashed too. The `if v` guard exists for `None` only.
+
+    user: ok leave it
+
+- id: g-065
+  label: yes
+  window: |
+    user: Lena decided the API stays versioned by URL path. no further discussion.
+
+    assistant: noted, I will keep /v1 in the path for the new endpoint.
+
+- id: g-066
+  label: no
+  window: |
+    assistant: Sorry — "sha" is git's term for the short code that names a commit. I should have just said "commit ID."
+
+    user: yes post
+
+    user: [tool result] https://github.com/example/relay/pull/233#discussion_r1180022417
+    {"isResolved":true}
+
+- id: g-067
+  label: no
+  window: |
+    assistant: Still open from earlier, your call: the tautological `assert result == {"id": target_id}` in `spec/archive/test_backend.py` is still there.
+
+    user: so what's the point of testing it again?
+    can we remote then push
+
+    user: [tool result] 31	)
+    32	def test_archive_targets_resolve_from_settings(app_fixture, target_name, key):
+    33	    _, app = app_fixture
+
+- id: g-068
+  label: no
+  window: |
+    assistant: **One trap to disarm before the pilot goes live:** `old_mode` → default sink is the *first* branch of `resolve_home_sink`. Your design keeps dual-writing `old_mode` at entry. Fix in REL-266, not REL-269.
+
+    user: the ranking and dispatch haven't been done at this stage yet
+    the test can be written later since the feature is not implemented yet?
+
+    user: [tool result] assert db_row["size"] == expected_size
+
+- id: g-069
+  label: yes
+  window: |
+    user: the integration tests are red again
+
+    user: [tool result] 14 failed - TimeoutError: QueuePool limit of size 10 overflow 0 reached
+
+    assistant: the connection pool is exhausted at 10 connections while the suite runs 12 workers.
+
+    user: cap the workers at 8 then.
+
+- id: g-070
+  label: no
+  window: |
+    user: actually can you raise it to 40 instead
+
+    user: [tool result] THRESHOLD = 40
+
+    assistant: raised to 40 and pushed.
+
+- id: g-071
+  label: yes
+  window: |
+    user: can you search chat session, I discussed about
+
+        if ruleset:
+            lift_ceiling = False
+
+    these 2 lines and that the gather_facts function already pass in that arg, so we shouldn't override like this
+
+    assistant: Found it. Session from 2026-06-02. What you said: `if ruleset: lift_ceiling = False` overrides a value the caller already passed into `gather_facts`. What got agreed: `may_lift: bool = True` on the fact bundle, and the evaluator reads it instead of forcing `False`.
+
+- id: g-072
+  label: no
+  window: |
+    assistant: Plain `git push` won't work — the base branch has diverged (local 140 ahead, origin 2 ahead), so it needs a force push. Option A undoes the merge and force-pushes only your PR branch. Option B force-pushes the base branch.
+
+    user: option A
+
+    but i wat to understand why first?
+    in all the chain of upstream base branches, I've recently merged main into it so it reflects the latest changes from main but why they all worked and didn't result in large diff except this one?
+
+- id: g-073
+  label: no
+  window: |
+    assistant: `patch_setting` mutates one key on the existing settings dict and restores it in `finally`. `load_settings` reassigns `settings` to a fresh dict loaded from the named toml file.
+
+    user: it feels like load_settings is the right call so it pretends it's live, would we be able to to wrap the whole test with with load_settings, and then set the env vars
+    settings["VENDOR_FEED_URL"] = FEED_URL
+    would that work? or it's stitll not recommended?
+
+    assistant: Whether that works hinges on two things I should verify rather than guess: whether `SKIP_SECRETS` is already set globally in the test process, and whether the fixture's `settings` is the same object the client reads.
+
+- id: g-074
+  label: no
+  window: |
+    user: yes give me the 9 user_id query
+
+    user: [tool result] # Search Results for "issue:RELAY-3QX"
+    - Dataset: `errors`
+    - Fields: `user.id`, `count()`
+    - Time range: Last 7d
+
+- id: g-075
+  label: no
+  window: |
+    user: this comment not necessary # Mirror the inputs the record will be stamped with, so the schedule and
+            # the record land on the same sink.  we know that the home sink is the one that results should be posted back to
+
+    user: [tool result] (eval):1: no matches found: --include=*.py
+
+    assistant: Removed the two lines.
+
+- id: g-076
+  label: no
+  window: |
+    user: for 311 it should follow the rewritten 289 and 287 should have the base branch as the one that it depends on (which one is it?)
+    can you message session worker-b3 to ask it to base its changes after #302 (i.e. changing the base branch)?
+
+    assistant: **#302's base should be `feat/rel-262-entry` (PR #309).** That is its hard dependency — the stripped #302 imports `maybe_enter_pilot`, which #309 adds.
+
+- id: g-077
+  label: yes
+  window: |
+    assistant: I set the circuit breaker to open after 5 failures in 30 seconds.
+
+    user: why 30 seconds?
+
+    assistant: the downstream health check takes 20 seconds to report recovery, so a shorter window reopens the breaker before the service is actually back.
+
+- id: g-078
+  label: no
+  window: |
+    user: by the way why are we using from generated.vendor_feed.openapi_client.rest import ApiException as the ApiException?
+
+    user: [tool result] 15:from __future__ import absolute_import
+    18:from openapi_client.api.exports_api import ExportsApi
+
+    assistant: It is the exception class the generated client raises. Every call into that client surfaces errors as that type, so the handler catches the class the client actually throws.
+
+- id: g-079
+  label: no
+  window: |
+    user: I get what you mean now, REL-231 is later and has more context right, so we should have the parent as 231 instead
+
+    assistant: Re-parenting all four sub-tasks to REL-231:
+
+- id: g-080
+  label: yes
+  window: |
+    user: chroma or sqlite-vec for the vector store?
+
+    assistant: sqlite-vec. it is one file and needs no daemon, so the command-line tool ships with no service to run.
+
+    user: agreed, sqlite-vec it is.
+
+- id: g-081
+  label: no
+  window: |
+    assistant: This PR's function docstring reads: "Invariable rejections only: a False here can never be flipped by anything the user does, so they are never asked to link a source."
+
+    user: This PR func docstring is not very helpful and can be reworded to something like "Simple eligibility check, if user does not pass this, early exit so we do not ask them to link a source"
+
+    user: [tool result] ok
+    def passes_prefilter(space: dict, snapshot: Snapshot, open_bands: list[str]) -> bool:
+        """
+        Simple eligibility check. A user who fails it exits early and is
+        never asked to link a source.
+        """
+
+- id: g-082
+  label: no
+  window: |
+    assistant: Found it. `_ARCHIVE_TARGET_KEYS` at `relay/archive/rotate.py:31` already holds those exact key-name strings.
+
+    user: yes
+
+    assistant: I'll extend the import and swap the literals for map lookups.
+
+- id: g-083
+  label: yes
+  window: |
+    assistant: Not as written — that version changes behavior. The ternary guards the wrong variable: `key` is already guaranteed non-`None` by the `RuntimeError` two lines up.
+
+    user: fine to lose per-key log granularity - key is pretty permanent once set, so apply inline and commit push
+
+    assistant: Applying the inline. Two edits: remove the helper, then inline at the call site.
+
+- id: g-084
+  label: no
+  window: |
+    user: fix the parser
+
+    assistant: which parser, the one in extract.py or the config reader?
+
+    user: the one in extract.py
+
+- id: g-085
+  label: yes
+  window: |
+    user: is this bug just affecting users who are 1 sync behind and ahve next_run on the same day as the digest is built?
+    or when next_run hasn't passed yet?
+
+    I'm not so sure about the plan of changing how get_overdue_items function works because it feels like there's a lot wider impact changing that function? brainstorm with me
+
+    assistant: Both. And you are right to hold off: `get_overdue_items` has 11 callers across digests, reminders and the export. Fixing the anchor inside the digest builder touches one.
+
+    user: ok do it in the digest builder then
+
+- id: g-086
+  label: no
+  window: |
+    user: cursor pagination or offset?
+
+    assistant: cursors keep a page stable under inserts. offset is simpler and every client already sends a page number.
+
+    user: let's think about it tomorrow.
+
+- id: g-087
+  label: no
+  window: |
+    assistant: Yes. Epic REL-150 — "Combine confirm and dispatch into one step". Your PR is 1 of 11 tickets.
+
+    user: can you push an empty commit? so we can trigger the workflow fresh?
+
+    user: [tool result] ---RUNSTATUS---
+    {"conclusion":"cancelled","status":"completed"}
+
+- id: g-088
+  label: yes
+  window: |
+    user: most of the copy is the same as the linked case, should we be just having an if else in the template? (and if you ignore how currently it's done for the other two templates, what would you recommend? are there other existing solutions that have if else?)
+
+    assistant: Two of the four differences are a paragraph each; the other two are a list and a link. Eleven templates in the repo already branch with `{% if %}` on a mode flag. One template with a flag, then: the two-file approach in the sibling exists only because it predates the flag convention.
+
+    user: ok one template
+
+- id: g-089
+  label: no
+  window: |
+    user: what does build_window return?
+
+    assistant: a Window carrying the messages, the rendered text and a truncated flag.
+
+- id: g-090
+  label: yes
+  window: |
+    user: bump the http client to 0.29?
+
+    assistant: pin it at 0.28. 0.29 replaces the transport interface, and the test suite injects a mock transport in about forty places.
+
+    user: pin it.
+
+- id: g-091
+  label: no
+  window: |
+    assistant: All nine are already inside the 24 — a strict subset, no new users.
+
+    user: also can you spin up a task or subagent to /ship then can you create a ticket for the frontend so we can handle this new state so users are not stuck in a spinner screen?
+
+    assistant: Dispatching the ship agent and creating the frontend ticket.
+
+- id: g-092
+  label: yes
+  window: |
+    assistant: Dependency check done. The two are only ever set together.
+
+    user: can you move it from sample_ranking to under ranking.py, the funcitno naming sample_... itself should be a good enough indiciation
+    the reason why I didn't want to be in /handlers folder is because it's supposed to be the API layer
+
+    user: [tool result] 4:from relay.rank.model import (
+    388:class LiveRanker(Ranker):
+
+- id: g-093
+  label: yes
+  window: |
+    user: what type for the created_at column?
+
+    assistant: store the timestamp as ISO-8601 text. sqlite has no datetime type, and ISO-8601 in UTC sorts correctly as plain text.
+
+- id: g-094
+  label: yes
+  window: |
+    user: should the cache lookup get a circuit breaker?
+
+    assistant: no. the cache runs in process, so there is no network call to fail and the breaker would only add a failure mode of its own.
+
+    user: leave it out then.
+
+- id: g-095
+  label: no
+  window: |
+    user: if we ever hit the provider rate limit we could add a retry budget with backoff
+
+    assistant: we could. nothing is hitting it today.
+
+- id: g-096
+  label: no
+  window: |
+    user: <ide_opened_file>The user opened the file spec/sync/test_closure_hold.py in the IDE.</ide_opened_file>
+    I'm running the editor in debug mode, and then running the API on the debug server - I'm suspecting the debug server may not be running in the same backend DB as the one run via the editor debug can you check?
+
+    assistant: Good instinct — let me check the editor launch configs and settings to see what env each one loads.
+
+- id: g-097
+  label: no
+  window: |
+    user: by default does this session have a name? if so I want to update the statusline so we display the session name
+
+    assistant: Checking your current statusline config and whether the statusline input carries a session name.
+
+- id: g-098
+  label: yes
+  window: |
+    user: cna you change this comment
+
+       A vendor verdict exists but the entries behind it were never cached, so the
+        total is unknown rather than absent.
+
+    instead of "it were never cached" , I think it's more appropirate to say that in rare cirucumstance where they're not persisted?
+
+    assistant: Changed. "Never cached" read as a normal path; "not persisted" says it is the rare failure the guard exists for, which is why the field is treated as unknown rather than empty.
+
+- id: g-099
+  label: yes
+  window: |
+    user: can you add also a requirement to read the record kind from openapi backend if possible so we'd never have the record kind mismatch?
+
+    assistant: The backend currently does **not** expose record kinds in the spec. The endpoint's `kind` is a plain string path param with no enum. So "read from OpenAPI" needs a backend change first. Adding it as a requirement with that precondition spelled out.
+
+- id: g-100
+  label: yes
+  window: |
+    assistant: Repo idiom check: two-file templates in one place, `{% if %}` in eleven. Fine either way.
+
+    user: separate message is right. the new copy adds four substantive things, not one condition: a different opening paragraph, a list of the next 3 dates, a different link target, and the action-required override. an if-else across all four is harder to read than two files
+
+    assistant: Two files then. Recording the four differences in the PR body so the next person does not collapse them.

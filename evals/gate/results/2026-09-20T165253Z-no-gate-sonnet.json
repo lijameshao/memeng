@@ -1,0 +1,77 @@
+{
+  "model": "sonnet",
+  "n": 100,
+  "invented_rate": 0.09615384615384616,
+  "empty_yes_rate": 0.0625,
+  "malformed": 0,
+  "latency": {
+    "mean_latency_s": 11.492224517418071,
+    "p95_latency_s": 25.195202499977313
+  },
+  "invented": [
+    {
+      "id": "g-007",
+      "window_head": "assistant: Extracted to `_check_cohort_a_ceiling` at `relay/quota/opening.py:96`. Call site is now 3 lines. Two early returns replace the nesting.",
+      "facts": [
+        {
+          "fact": "Naming avoids the term 'cohort A'; quota ceiling checks are named as pilot-specific instead",
+          "rationale": "cohort A is hard to know what it means to a reader, so pilot-specific naming is used instead"
+        }
+      ]
+    },
+    {
+      "id": "g-024",
+      "window_head": "user: can you create 2 other tickets related to REL-318 I want to split the implementation into linked and unlinked",
+      "facts": [
+        {
+          "fact": "The unlinked-case changes stay in the linked-case pull request instead of being removed",
+          "rationale": "so another agent can copy the unlinked-case changes from this pull request before they are removed"
+        }
+      ]
+    },
+    {
+      "id": "g-038",
+      "window_head": "assistant: ```python",
+      "facts": [
+        {
+          "fact": "A comment must not describe how the rollout process pins the latest version onto a space, even when explaining related fallback logic elsewhere",
+          "rationale": "Referencing rollout's version-pinning behavior in an unrelated comment couples that comment to the rollout process and risks the comment going stale if rollout logic changes"
+        }
+      ]
+    },
+    {
+      "id": "g-076",
+      "window_head": "user: for 311 it should follow the rewritten 289 and 287 should have the base branch as the one that it depends on (which one is it?)",
+      "facts": [
+        {
+          "fact": "PR #302's base branch is feat/rel-262-entry (PR #309)",
+          "rationale": "the stripped #302 imports maybe_enter_pilot, which #309 adds, making #309 a hard dependency"
+        }
+      ]
+    },
+    {
+      "id": "g-099",
+      "window_head": "user: can you add also a requirement to read the record kind from openapi backend if possible so we'd never have the record kind mismatch?",
+      "facts": [
+        {
+          "fact": "Record kind cannot currently be read from the OpenAPI spec to catch a record kind mismatch",
+          "rationale": "The backend's endpoint exposes `kind` as a plain string path parameter with no enum, so reading it from OpenAPI requires a backend change first"
+        }
+      ]
+    }
+  ],
+  "empty_yes": [
+    {
+      "id": "g-009",
+      "window_head": "assistant: Mechanically it's small \u2014 ~2 lines. Flip `wait_until_settled=False` to `True` and change the assertion to `[\"SENT\", \"SETTLED\"]`."
+    },
+    {
+      "id": "g-064",
+      "window_head": "user: def _id_text(cls, v: UUID | str | None) -> str | None:"
+    },
+    {
+      "id": "g-098",
+      "window_head": "user: cna you change this comment"
+    }
+  ]
+}

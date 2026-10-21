@@ -1,0 +1,93 @@
+{
+  "transcripts": [
+    {
+      "transcript": "01-explicit-reason.jsonl",
+      "facts": 1,
+      "faithful": 1,
+      "stored": [
+        {
+          "fact": "Ingest worker retry budget capped at three attempts with exponential backoff (1s, 2s, 4s), replacing five retries with a fixed one second sleep",
+          "rationale": "The upstream has a 3 second p99, so waiting past 4s almost never succeeds and just holds the worker",
+          "message_ids": [
+            "01-01",
+            "01-02",
+            "01-03",
+            "01-04",
+            "01-05",
+            "01-06"
+          ],
+          "faithful": true,
+          "why": "The user's third turn states this exact reason word for word: 3s p99, past 4s almost never succeeds, holds the worker."
+        }
+      ],
+      "unfaithful": [],
+      "malformed": []
+    },
+    {
+      "transcript": "02-no-reason.jsonl",
+      "facts": 0,
+      "faithful": 0,
+      "stored": [],
+      "unfaithful": [],
+      "malformed": []
+    },
+    {
+      "transcript": "03-named-person.jsonl",
+      "facts": 1,
+      "faithful": 1,
+      "stored": [
+        {
+          "fact": "Blue-green deploy cuts over by draining the old pool instead of cutting over immediately",
+          "rationale": "Alex decided it, no other reason given",
+          "message_ids": [
+            "03-01",
+            "03-02",
+            "03-03",
+            "03-04"
+          ],
+          "faithful": true,
+          "why": "The user states 'Alex decided we drain. no other reason given, that is the call' word for word."
+        }
+      ],
+      "unfaithful": [],
+      "malformed": []
+    },
+    {
+      "transcript": "04-reason-in-tool-result.jsonl",
+      "facts": 1,
+      "faithful": 1,
+      "stored": [
+        {
+          "fact": "Circuit breaker threshold to catalog-service raised from 12 to 20 consecutive failures",
+          "rationale": "12 consecutive timeouts in 30 seconds was tripping the breaker on a slow but healthy dependency \u2014 catalog-service p99 latency was 8.4s after its deploy, not actually down",
+          "message_ids": [
+            "04-01",
+            "04-02",
+            "04-03",
+            "04-04",
+            "04-05",
+            "04-06"
+          ],
+          "faithful": true,
+          "why": "The tool result gives 12 timeouts in 30s and catalog-service p99 8.4s since deploy, and the assistant's final message restates both numbers as the reason for the trip."
+        }
+      ],
+      "unfaithful": [],
+      "malformed": []
+    },
+    {
+      "transcript": "05-debugging-chatter.jsonl",
+      "facts": 0,
+      "faithful": 0,
+      "stored": [],
+      "unfaithful": [],
+      "malformed": []
+    }
+  ],
+  "totals": {
+    "facts": 3,
+    "faithful": 3,
+    "unfaithful": 0
+  },
+  "violations": []
+}
