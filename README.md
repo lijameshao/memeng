@@ -2,6 +2,8 @@
 
 Memory for engineering decisions in Claude Code. memeng captures each decision and its reason from the conversation, stores them in one SQLite file, and adds them back to your prompt when the subject comes up again.
 
+Blog post: [Building a memory harness from scratch](https://lijames.substack.com/p/building-a-memory-harness-from-scratch)
+
 ## Why
 
 Code shows what was built, not why. The reason for a choice usually lives in a chat thread, a pull request comment or one person's head, and it is lost within months. An engineer who finds a rule with no reason can either keep it without knowing why or remove it and find out the hard way.
